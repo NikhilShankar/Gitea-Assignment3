@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Remove gitea release
+    kubernetes.core.helm:
+      name: gitea
+      release_namespace: default
+      state: absent
+      wait: true
+  
+  - name: Remove MySQL deployment
+    kubernetes.core.k8s:
+      state: absent
+      src: mysql-deployment.yaml

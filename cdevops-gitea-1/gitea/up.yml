@@ -1,0 +1,31 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Add gitea chart repo
+    kubernetes.core.helm_repository:
+      name: gitea-charts
+      repo_url: "https://dl.gitea.com/charts/"
+  
+  - name: Deploy MySQL using manifest
+    kubernetes.core.k8s:
+      state: present
+      src: mysql-deployment.yaml
+  
+  - name: Wait for MySQL to be ready
+    kubernetes.core.k8s_info:
+      kind: Pod
+      label_selectors:
+        - app=gitea-mysql
+      wait: yes
+      wait_condition:
+        type: Ready
+        status: "True"
+      wait_timeout: 300
+  
+  - name: Deploy latest version of gitea
+    kubernetes.core.helm:
+      name: gitea
+      chart_ref: gitea-charts/gitea
+      release_namespace: default
+      values_files:
+      - values.yaml

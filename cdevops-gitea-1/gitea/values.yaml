@@ -1,0 +1,27 @@
+redis-cluster:
+  enabled: false
+redis:
+  enabled: false
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+persistence:
+  enabled: true
+  size: 10Gi
+
+gitea:
+  config:
+    database:
+      DB_TYPE: mysql
+      HOST: gitea-mysql:3306
+      NAME: gitea
+      USER: gitea
+      PASSWD: gitea-password
+    session:
+      PROVIDER: db
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: level
